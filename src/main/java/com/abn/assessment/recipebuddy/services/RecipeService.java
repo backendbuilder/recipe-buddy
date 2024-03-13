@@ -1,5 +1,6 @@
 package com.abn.assessment.recipebuddy.services;
 
+import com.abn.assessment.recipebuddy.entities.Ingredient;
 import com.abn.assessment.recipebuddy.entities.Recipe;
 import com.abn.assessment.recipebuddy.exceptions.EntityNotFoundException;
 import com.abn.assessment.recipebuddy.repositories.RecipeRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RecipeService {
@@ -25,7 +27,14 @@ public class RecipeService {
      * @return created Recipe
      */
     public Recipe createRecipe(Recipe recipe){
+
+        addRecipeIdToIngredients(recipe);
         return recipeRepository.save(recipe);
+    }
+
+    private void addRecipeIdToIngredients(Recipe recipe) {
+        List<Ingredient> ingredients = recipe.getIngredients();
+        ingredients.forEach(ingredient -> ingredient.setRecipe(recipe));
     }
 
     /**
@@ -46,6 +55,8 @@ public class RecipeService {
         if (recipeRepository.existsById(recipe.getId())) {
             return  recipeRepository.save(recipe);
         } else throw new EntityNotFoundException(NOT_FOUND);
+
+        /*TODO remove all unused ingredients that are still in the database after updating a recipe*/
 
     }
 
