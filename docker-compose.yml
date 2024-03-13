@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  recipe-buddy:
+    build: .
+    container_name: recipe-buddy
+    image: recipe-buddy:latest
+    depends_on:
+      - recipe-buddy-db
+    restart: on-failure
+    ports:
+      - "5005:5005"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      _JAVA_OPTIONS: >
+        -Xdebug
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    networks:
+      my-docker-network:
+
+  recipe-buddy-db:
+    image: postgres
+    restart: on-failure
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_USER: recipe-buddy-user
+      POSTGRES_PASSWORD: recipe-buddy-password
+      POSTGRES_DB: recipe-buddy-db
+      PGPORT: 5433
+    volumes:
+      - recipe-buddy_db_data:/var/lib/postgresql/data
+    networks:
+      my-docker-network:
+
+volumes:
+  recipe-buddy_db_data:
+
+networks:
+  my-docker-network:
