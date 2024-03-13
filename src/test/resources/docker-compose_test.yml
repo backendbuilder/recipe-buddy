@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+
+  recipe-buddy-db:
+    image: postgres
+    restart: on-failure
+    environment:
+      POSTGRES_USER: recipe-buddy-user
+      POSTGRES_PASSWORD: recipe-buddy-password
+      POSTGRES_DB: recipe-buddy-db
+      PGPORT: 5434
+    volumes:
+      - recipe-buddy_db_data:/var/lib/postgresql/data
+    networks:
+      my-docker-network:
+
+volumes:
+  recipe-buddy_db_data:
+
+networks:
+  my-docker-network:

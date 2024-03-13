@@ -20,7 +20,7 @@ public class Recipe {
     int preparationTime;
     boolean vegetarian;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe_id", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<RecipeIngredient> recipeIngredients;
 
 }
