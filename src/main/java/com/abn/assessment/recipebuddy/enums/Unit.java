@@ -1,4 +1,4 @@
-package com.abn.assessment.recipebuddy.dtos;
+package com.abn.assessment.recipebuddy.enums;
 
 public enum Unit {
     GRAM,
