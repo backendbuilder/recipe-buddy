@@ -1,8 +1,6 @@
 spring:
   datasource:
     url: jdbc:postgresql://recipe-buddy-db:5433/recipe-buddy-db
-    username: recipe-buddy-user
-    password:  recipe-buddy-password
   devtools:
     remote:
       proxy:

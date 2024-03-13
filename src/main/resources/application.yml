@@ -9,6 +9,6 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/recipe-buddy-db
+    url: jdbc:postgresql://localhost:5433/recipe-buddy-db
     username: recipe-buddy-user
     password:  recipe-buddy-password
