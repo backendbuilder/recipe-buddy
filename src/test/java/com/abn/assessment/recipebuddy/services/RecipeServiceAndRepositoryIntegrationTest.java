@@ -1,10 +1,9 @@
 package com.abn.assessment.recipebuddy.services;
 
+import com.abn.assessment.recipebuddy.enums.Unit;
 import com.abn.assessment.recipebuddy.entities.Ingredient;
 import com.abn.assessment.recipebuddy.entities.Recipe;
-import com.abn.assessment.recipebuddy.entities.RecipeIngredient;
 import com.abn.assessment.recipebuddy.repositories.IngredientRepository;
-import com.abn.assessment.recipebuddy.repositories.RecipeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,9 +16,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,11 +46,8 @@ class RecipeServiceAndRepositoryIntegrationTest {
 
     @Test
     void createRecipe() {
-        //create recipe
-        //save recipe in service
-        //retreive recipe in service
-        //verify equals
 
+        //prepare
         Recipe recipe = new Recipe();
         recipe.setName("Pasta Recipe");
         recipe.setInstructions("Step 1: do this \nStep 2: do that");
@@ -62,27 +57,33 @@ class RecipeServiceAndRepositoryIntegrationTest {
 
         Ingredient cheese = new Ingredient();
         cheese.setName("cheese");
-        ingredientRepository.save(cheese);
+        cheese.setUnit(Unit.GRAM);
+        cheese.setQuantity(80);
         Ingredient spaghetti = new Ingredient();
         spaghetti.setName("spaghetti");
-        ingredientRepository.save(spaghetti);
+        spaghetti.setUnit(Unit.CUP);
+        spaghetti.setQuantity(2);
 
-        RecipeIngredient cheeseForPasta = new RecipeIngredient();
-        cheeseForPasta.setIngredient_id(cheese);
+        List<Ingredient> pastaIngredients = new ArrayList<>();
+        pastaIngredients.add(cheese);
+        pastaIngredients.add(spaghetti);
+        recipe.setIngredients(pastaIngredients);
 
-        RecipeIngredient spaghettiForPasta = new RecipeIngredient();
-        spaghettiForPasta.setIngredient_id(spaghetti);
-
-        Set<RecipeIngredient> pastaIngredients = new HashSet<>();
-        pastaIngredients.add(cheeseForPasta);
-        pastaIngredients.add(spaghettiForPasta);
-        recipe.setRecipeIngredients(pastaIngredients);
-
+        //execute
         recipeService.createRecipe(recipe);
         List<Recipe> recipeList =  recipeService.readRecipeByName("Pasta Recipe");
 
+        //verify
         assertEquals(1, recipeList.size());
-
+        assertEquals("Pasta Recipe", recipeList.get(0).getName());
+        assertEquals("Step 1: do this \nStep 2: do that", recipeList.get(0).getInstructions());
+        assertEquals(4, recipeList.get(0).getServings());
+        assertEquals(30, recipeList.get(0).getPreparationTime());
+        assertTrue(recipeList.get(0).isVegetarian());
+        assertEquals(2, recipeList.get(0).getIngredients().size());
+        assertEquals("cheese", recipeList.get(0).getIngredients().get(0).getName());
+        assertEquals(Unit.GRAM, recipeList.get(0).getIngredients().get(0).getUnit());
+        assertEquals(80, recipeList.get(0).getIngredients().get(0).getQuantity());
 
     }
 }
