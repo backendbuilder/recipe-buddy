@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,9 +18,9 @@ public class Recipe {
     String instructions;
     int servings;
     int preparationTime;
-    boolean vegetarian;
+    boolean isVegetarian;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<RecipeIngredient> recipeIngredients;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Ingredient> ingredients;
 
 }
