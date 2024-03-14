@@ -13,14 +13,14 @@ public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    String name;
-    String instructions;
-    int servings;
-    int preparationTime;
-    boolean isVegetarian;
+    private String id;
+    private String name;
+    private String instructions;
+    private int servings;
+    private int preparationTime;
+    private boolean isVegetarian;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Ingredient> ingredients;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ingredient> ingredients;
 
 }

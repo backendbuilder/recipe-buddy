@@ -13,18 +13,18 @@ public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    private String id;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "recipe_id")
-    Recipe recipe;
+    private Recipe recipe;
 
-    String name;
+    private String name;
 
     @Enumerated(EnumType.STRING)
-    Unit Unit;
+    private Unit Unit;
 
-    int quantity;
+    private int quantity;
 
 }
