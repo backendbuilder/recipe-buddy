@@ -5,6 +5,7 @@ import com.abn.assessment.recipebuddy.entities.Recipe;
 import com.abn.assessment.recipebuddy.exceptions.EntityNotFoundException;
 import com.abn.assessment.recipebuddy.repositories.IngredientRepository;
 import com.abn.assessment.recipebuddy.repositories.RecipeRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +50,14 @@ public class RecipeService {
      * @param excludedIngredients The list of excluded ingredients to filter on (optional).
      * @return The list of filtered recipes.
      */
-    public List<Recipe> readRecipes(String name, boolean isVegetarian, int servings, String instructionsContain, List<String> inclusedIngredients, List<String> excludedIngredients) {
+    public List<Recipe> readRecipes(String name, boolean isVegetarian, int servings, String instructionsContain, @NotNull List<String> inclusedIngredients, @NotNull List<String> excludedIngredients) {
         List<Recipe> recipes = recipeRepository.findWithFilters(name, isVegetarian, servings, instructionsContain);
-        recipes = filterOnIncludedIngredients(recipes, inclusedIngredients);
-        recipes = filterOnExcludedIngredients(recipes, excludedIngredients);
-
+        if(!inclusedIngredients.isEmpty()) {
+            recipes = filterOnIncludedIngredients(recipes, inclusedIngredients);
+        }
+        if(!excludedIngredients.isEmpty()) {
+            recipes = filterOnExcludedIngredients(recipes, excludedIngredients);
+        }
         return recipes;
     }
 
