@@ -7,6 +7,9 @@ public enum Unit {
     MILLILITER,
     TABLE_SPOON,
     TEA_SPOON,
-    CUP
+    CUP,
+    PIECE,
+    SLICE,
+
 
 }
