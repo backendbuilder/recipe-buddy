@@ -124,9 +124,13 @@ class RecipeServiceAndRepositoryIntegrationTest {
         recipeService.createRecipe(recipe);
         List<Recipe> recipes = recipeRepository.findWithFilters("Pasta Recipe", true, 4, "Step");
         assertEquals(1, recipes.size());
+        assertEquals("Pasta Recipe", recipes.get(0).getName());
+        assertTrue(recipes.get(0).isVegetarian());
+        assertEquals(4, recipes.get(0).getServings());
+        assertTrue(recipes.get(0).getInstructions().contains("Step"));
     }
     @Test
-    void createAndRetrieveRecipesWithFilters2(){
+    void createAndRetrieveRecipesWithIncludedAndExcludedIngredientsFilters2(){
         //prepare
         String name = TestHelper.getUnsavedRecipe().getName();
         boolean isVegetarian = TestHelper.getUnsavedRecipe().isVegetarian();
@@ -178,6 +182,14 @@ class RecipeServiceAndRepositoryIntegrationTest {
 
         List<Recipe> filteredRecipes = recipeService.readRecipes(name, isVegetarian, servings, containsWord, included, excluded);
         assertEquals(1, filteredRecipes.size());
+        List<Ingredient> ingredients = filteredRecipes.get(0).getIngredients();
+
+        for(String ingredient : included){
+            assertTrue(ingredients.stream().anyMatch(i -> i.getName().equals(ingredient)));
+        }
+        for(String ingredient : excluded){
+            assertTrue(ingredients.stream().noneMatch(i -> i.getName().equals(ingredient)));
+        }
 
     }
 
