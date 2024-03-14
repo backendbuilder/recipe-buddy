@@ -33,7 +33,7 @@ public class RecipeService {
      */
     public Recipe createRecipe(Recipe recipe) {
         Recipe savedRecipe = recipeRepository.save(recipe);
-        List<Ingredient> ingredients = updateIngredientsWithRecipe(savedRecipe);//this was Recipe
+        List<Ingredient> ingredients = updateIngredientsWithRecipe(savedRecipe);
         ingredientRepository.saveAll(ingredients);
         return savedRecipe;
     }
